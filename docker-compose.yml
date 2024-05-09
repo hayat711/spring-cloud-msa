@@ -1,0 +1,132 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: hyt
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db-data:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pdadmin4@gmail.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      # Port used for the Zipkin UI and HTTP Api
+      - "9411:9411"
+    networks:
+      - spring
+
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+
+#  euerka-server:
+#    image: hayat01/eureka-server:latest
+#    container_name: eureka-server
+#    ports:
+#      - "8761:8761"
+#    depends_on:
+#      - zipkin
+#    networks:
+#      - spring
+#    entrypoint:
+#      - SPRING_PROFILES_ACTIVE=docker
+#
+#
+#  apigateway:
+#    image: hayat01/apigateway:latest
+#    container_name: apigateway
+#    ports:
+#      - "8088:8088"
+#    depends_on:
+#      - zipkin
+#      - euerka-server
+#    networks:
+#      - spring
+#    entrypoint:
+#      - SPRING_PROFILES_ACTIVE=docker
+#
+#  customer:
+#    image: hayat01/customer:latest
+#    container_name: customer
+#    ports:
+#      - "8090:8090"
+#    entrypoint:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#      - postgres
+#    depends_on:
+#      - zipkin
+#      - euerka-server
+#      - postgres
+#      - rabbitmq
+#
+#  fraud:
+#    image: hayat01/fraud:latest
+#    container_name: fraud
+#    ports:
+#      - "8091:8091"
+#    entrypoint:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#      - postgres
+#    depends_on:
+#      - zipkin
+#      - postgres
+#      - rabbitmq
+#
+#  notification:
+#    image: hayat01/notification:latest
+#    container_name: notification
+#    ports:
+#      - "8096:8096"
+#    entrypoint:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#      - postgres
+#    depends_on:
+#      - zipkin
+#      - postgres
+#      - rabbitmq
+
+networks:
+  postgres:
+    driver: bridge
+  spring:
+    driver: bridge
+
+volumes:
+  db-data:
+  pgadmin:

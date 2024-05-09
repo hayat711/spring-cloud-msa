@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-233.13135.103">
+    <data-source name="customer@localhost" uuid="9aa85467-2cb2-43fa-a2e3-826bef99817a">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>hyt</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="fraud@localhost" uuid="318a9931-aa82-4177-bef0-ec84bb3c4bbf">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>hyt</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>
